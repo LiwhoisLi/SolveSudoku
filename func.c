@@ -1,9 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#define N 9
-#define FOR(i,n) for(i=0;i<n;i++)
-#define MERGE(X,Y) (X/3*3+Y/3)
-#define STAT(X)		(!((X)&(X-1)))
+#include "func.h"
 
 void readso(int *p)
 {
@@ -18,15 +15,15 @@ void detectR(int *p,int m,int *f)		//Detect the constraint in the given row
 	int i;
 	FOR(i,N)
 		if(p[m*N+i])
-			*f= (*f) & (~(1<<(p[m*N+i]-1)));
+			(*f) = (*f) & (~Nth(p[m*N+i]));
 }
 
-void detectC(int *p,int n,int f)		//Detect the constraint in the given column
+void detectC(int *p,int n,int *f)		//Detect the constraint in the given column
 {
 	int j;
 	FOR(j,N)
 		if(p[j*N+n])
-			*f= (*f) & (~(1<<(p[j*N+n]-1)));
+			(*f) = (*f) & (~Nth(p[j*N+n]));
 }
 
 void detectD(int *p,int no,int *f)	//Detect the constraint in the given district
@@ -36,8 +33,8 @@ void detectD(int *p,int no,int *f)	//Detect the constraint in the given district
 	int i,j;
 	FOR(i,3)
 		FOR(j,3)
-			if(p[+j*N+i])
-				*f= (*f) & (~(1<<(p[j*N+i]-1)));
+			if(p[j*N+i])
+				(*f) = (*f) & (~Nth(p[j*N+i]));
 }
 
 int stat(int n)
