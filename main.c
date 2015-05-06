@@ -3,16 +3,25 @@
 #include "func.h"
 
 
-int main()
+int main(int argc, char *argv[])
 {
+	if(argc!=2)
+	{
+		printf("Usage: ./sudoku [datafilename]\n");
+		return -1;
+	}
+	
 	int sudoku[N*N];
 	int count[N*N];
 	int cflags[3][N];
 	int eflags[3]={0x1ff,0x1ff,0x1ff};
 	int area;
 	int m,n;
+	int tflag;
 	
-	readso(sudoku);
+	readso(argv[1],sudoku);
+	
+	show(sudoku);
 	
 	FOR(m,3)
 		FOR(n,N)
@@ -24,44 +33,36 @@ int main()
 			
 			area = MERGE(m,n);
 			
-			if(eflags[0]==(eflags[1]|Nth(m)))
+			
+			if((eflags[0]>>m)%2)
 				detectR(sudoku,m,cflags[0]+m);
-			
-			if(!cflags[0][m])		return -1;		
-			else if(STAT(cflags[0][m]))
-			{
-				sudoku[m*N+n] = stat(cflags[0][m]);
-				eflags[0] |= Nth(m);
-				eflags[1] &= ~Nth(n);
-				eflags[2] &= ~Nth(area-1);
-				continue;
-			}
-			
-			
-			
-			if(eflags[1]==(eflags[1]|Nth(n)))
+			if((eflags[1]>>n)%2)
 				detectC(sudoku,n,cflags[1]+n);
-			
-			if(!cflags[1][n])		return -1;		
-			else if(STAT(cflags[1][n]))
-			{
-				sudoku[m*N+n] = stat(cflags[1][n]);
-				eflags[0] &= ~Nth(m);
-				eflags[1] |= Nth(n);
-				eflags[2] &= ~Nth(area);
-				continue;
-			}
-			
-			if(eflags[1]==(eflags[2]|Nth(area)))
+			if((eflags[2]>>area)%2)
 				detectD(sudoku,area,cflags[2]+area);
 			
-			if(!cflags[2][area])		return -1;		
-			else if(STAT(cflags[2][area]))
+			tflag = cflags[0][m]&cflags[1][n]&cflags[2][area];
+			
+			
+			if(!tflag)	
 			{
-				sudoku[m*N+n] = stat(cflags[2][area]);
+				show(sudoku);
+				printf("%x %x  error\n",cflags[0][m],cflags[1][n]);
+				return -1;		
+			}
+			else if(STAT(tflag))
+			{
+				sudoku[m*N+n] = stat(tflag)+1;
+				
+				eflags[0] |= Nth(m);
+				eflags[1] |= Nth(n);
+				eflags[2] |= Nth(area);
+			}
+			else
+			{
 				eflags[0] &= ~Nth(m);
 				eflags[1] &= ~Nth(n);
-				eflags[2] |= Nth(area);
+				eflags[2] &= ~Nth(area);
 			}
 		}
 	

@@ -6,7 +6,7 @@
 
 
 
-void readso(int*);
+void readso(char*,int*);
 void detectR(int*,int,int*);
 void detectC(int*,int,int*);
 void detectD(int*,int,int*);

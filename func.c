@@ -2,12 +2,17 @@
 #include<stdlib.h>
 #include "func.h"
 
-void readso(int *p)
+void readso(char *c,int *p)
 {
+	FILE *fp = NULL;
+	while(1)
+		if(fp = fopen(c,"r"))
+			break;
 	int m,n;
 	FOR(m,N)
 		FOR(n,N)
-			scanf("%d",p+m*N+n);
+			fscanf(fp,"%d",p+m*N+n);
+	fclose(fp);
 }
 
 void detectR(int *p,int m,int *f)		//Detect the constraint in the given row
@@ -54,4 +59,5 @@ void show(int *p)
 			printf("%d ",p[m*N+n]);
 		printf("\n");
 	}
+	printf("\n\n");
 }
